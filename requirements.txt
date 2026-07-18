@@ -18,10 +18,8 @@ streamlit==1.36.0
 # Notebooks
 jupyter==1.0.0
 ipykernel==6.29.4
-
-# Google Sheets access (for pulling starter data directly, optional)
-gspread==6.1.2
-google-auth==2.30.0
+nbformat==5.10.4
+nbconvert==7.16.4
 
 # Testing
 pytest==8.2.2
