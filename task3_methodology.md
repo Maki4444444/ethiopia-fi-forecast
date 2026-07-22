@@ -139,3 +139,23 @@ reassuring directional cross-check.
   their `source_url` is intentionally blank rather than a guessed link.
 - The association matrix mixes units across columns; not directly comparable cell-to-cell
   without normalization.
+
+## 9. Post-review correction (2026-07-22)
+
+Two `impact_estimate` cells (`IMP_0002` → `USG_TELEBIRR_USERS`, `IMP_0006` → `USG_MPESA_USERS`)
+were originally blank. Root cause: both target a `count`-type indicator (raw user counts), while
+`impact_estimate` elsewhere in this table means percentage points — a genuinely different unit,
+so leaving them blank (rather than inventing a percentage-point number) was the correct original
+call, not an error.
+
+Resolved one of the two with a real citation: `IMP_0006` (M-Pesa Ethiopia) now has
+`impact_estimate = 1,200,000` users, sourced from TechCabal's Nov 2023 report that M-Pesa Ethiopia
+reached 1.2 million users three months after its August 2023 launch — matching this row's
+`lag_months = 3` exactly. Unit is users, not percentage points; treat this cell differently from
+the rest of the column when aggregating.
+
+`IMP_0002` (Telebirr) was left as `NaN` on purpose: no publicly reported figure exists close to
+the 3-month mark (nearest verified milestones are ~1M users at 2 weeks and ~3.8M at <1 month,
+jumping to 15.6M at 9 months) — interpolating a number here would fabricate false precision.
+Quantitative modeling code should continue to skip `NaN` rows as before; this row's
+`impact_direction`/`impact_magnitude`/`notes` still carry the qualitative signal.
