@@ -275,3 +275,24 @@ The events that actually had zero were EVT_0006 and EVT_0009 both addressed by I
   each indicator_code as its own series, don't average or merge them
 - Non-monotonic trends found in DEPTH_BORROW_RATE and GEN_GAP_ACC are real patterns in the sourced
   data, not artifacts, worth investigating causally in Task 3 rather than smoothing over
+
+## Round 4 enrichment (2026-07-21, for Task 4)
+
+Task 4 requires forecasting the two official Findex-defined targets: Access (Account Ownership,
+already well covered by `ACC_OWNERSHIP`) and Usage (Digital Payment Adoption Rate). Prior rounds'
+data had **no indicator matching the Usage target as literally defined by Findex** ("share of
+adults who made or received a digital payment") -- only proxies (`USG_ACTIVE_RATE`,
+`USG_P2P_COUNT`, single-year snapshots). Added two observations to close this gap:
+
+| record_id | indicator_code | date | value | confidence | source |
+|---|---|---|---|---|---|
+| REC_0057 | USG_DIGITAL_PAYMENT | 2021-06-29 | 20.0% | high | World Bank blog, Africa Can End Poverty -- direct statement that 20% of adults used their accounts for digital payments |
+| REC_0058 | USG_DIGITAL_PAYMENT | 2024-11-29 | 35.0% | medium | 10 Academy KAIM 9 Week 11 challenge brief, "Ethiopia's indicators (2024)" section. `source_url` intentionally left blank -- the brief attributes this to Global Findex 2024/2025 but the exact figure could not be independently re-verified on a live, fetchable World Bank page this session |
+
+**Why this still counts as a real (if very sparse) time series:** two points, 2021 and 2024,
+same definition, same survey (Global Findex), same 12-month recall window. This mirrors the
+`ACC_OWNERSHIP` sparsity pattern the challenge brief itself calls out, just with fewer points --
+a genuine data-availability constraint carried into Task 4 as an explicit limitation (see
+`notebooks/04_forecasting.ipynb`, Section 7), not smoothed over.
+
+record_id uniqueness re-verified after this round (`df['record_id'].duplicated().sum() == 0`).
