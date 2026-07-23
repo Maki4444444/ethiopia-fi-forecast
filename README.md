@@ -80,12 +80,16 @@ ethiopia-fi-forecast/
 │   └── processed/           # Enriched dataset + impact_links (output of Task 1)
 ├── notebooks/
 │   ├── 01_schema_understanding.ipynb   # Task 1: schema validation & exploration
-│   └── 02_eda.ipynb                    # Task 2: exploratory data analysis
+│   ├── 02_eda.ipynb                    # Task 2: exploratory data analysis
+│   ├── 03_impact_modeling.ipynb        # Task 3: event-indicator impact modeling
+│   └── 04_forecasting.ipynb            # Task 4: Access/Usage forecasts, 2025-2027
 ├── src/
-│   ├── data_loader.py        # Load/validate the dataset, event-impact coverage checks
-│   └── eda_utils.py          # Reusable analysis helpers used by the EDA notebook
-├── dashboard/                # Streamlit app (later task)
-├── models/                   # Trained/serialized models (later task)
+│   ├── data_loader.py         # Load/validate the dataset, event-impact coverage checks
+│   ├── eda_utils.py           # Reusable analysis helpers used by the EDA notebook
+│   ├── impact_model.py        # Event-augmented impact simulation (Task 3)
+│   └── forecast_model.py      # Trend regression, scenarios, event-augmented forecasts (Task 4)
+├── dashboard/
+│   └── app.py                 # Task 5: Streamlit dashboard (Overview/Trends/Forecasts/Projections)
 ├── reports/figures/          # Exported charts for the final report
 ├── tests/                    # pytest unit tests
 ├── data_enrichment_log.md    # Source/confidence documentation for every added record
@@ -103,14 +107,34 @@ jupyter nbconvert --to notebook --execute --inplace notebooks/01_schema_understa
 # Task 2 exploratory data analysis
 jupyter nbconvert --to notebook --execute --inplace notebooks/02_eda.ipynb
 
+# Task 3 event impact modeling
+jupyter nbconvert --to notebook --execute --inplace notebooks/03_impact_modeling.ipynb
+
+# Task 4 forecasting (writes data/processed/forecasts.csv, used by the dashboard)
+jupyter nbconvert --to notebook --execute --inplace notebooks/04_forecasting.ipynb
+
 # run tests
 pytest tests/ -v
 ```
+
+## Running the Dashboard
+
+```bash
+# from the repo root, after running the Task 4 notebook at least once
+pip install -r requirements.txt
+streamlit run dashboard/app.py
+```
+
+Four sections, navigable from the sidebar:
+- **Overview** -- summary metric cards (Access, Mobile Money, Usage, P2P/ATM crossover) with year-over-year deltas
+- **Trends** -- multi-indicator time series with a date-range slider, event overlay, and CSV export
+- **Forecasts** -- Access/Usage projections to 2027 with a toggle between statistical confidence intervals and optimistic/base/pessimistic scenarios, plus the event-augmented estimate
+- **Inclusion Projections** -- progress toward the NFIS-II Access target under a selectable scenario, and an Access-vs-Usage comparison
 
 ## Current Status
 
 - [x] Task 1: Data exploration and enrichment
 - [x] Task 2: Exploratory data analysis
-- [ ] Task 3: Event impact modeling
-- [ ] Task 4: Forecasting
-- [ ] Task 5: Dashboard
+- [x] Task 3: Event impact modeling
+- [x] Task 4: Forecasting Access and Usage (2025-2027)
+- [x] Task 5: Interactive dashboard
