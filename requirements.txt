@@ -25,6 +25,7 @@ nbconvert==7.16.4
 # Testing
 pytest==8.2.2
 
+
 # Utilities
 python-dotenv==1.0.1
 requests==2.32.3
